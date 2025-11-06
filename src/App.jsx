@@ -41,9 +41,12 @@ function StatSlider({ label, unit, value, min, max, step, onChange, accentColor 
 
 // --- Main App Component ---
 export default function App() {
+  const [rpmStart, setRpmStart] = useState(500);
+  const [durabilityStart, setDurabilityStart] = useState(0);
+
   // --- State ---
   // Default budget of 300 points
-  const [totalBudget, setTotalBudget] = useState(300);
+  const [totalBudget, setTotalBudget] = useState(200);
   
   // Default weight: 1 Durability point is "worth" 10 RPM points.
   const [rpmDurabilityRatio, setRpmDurabilityRatio] = useState(10);
@@ -80,7 +83,7 @@ export default function App() {
     const clampedRpm = Math.max(0, Math.min(newRpm, maxRpm));
     
     setRpm(clampedRpm);
-    const newDurability = totalBudget - (clampedRpm / rpmDurabilityRatio);
+    const newDurability =  totalBudget - (clampedRpm / rpmDurabilityRatio);
     setDurability(newDurability);
   }, [totalBudget, rpmDurabilityRatio]);
 
@@ -140,21 +143,21 @@ export default function App() {
           <StatSlider
             label="Durability"
             unit="HP"
-            value={durability}
-            min={0}
-            max={totalBudget}
+            value={durability + durabilityStart}
+            min={durabilityStart}
+            max={totalBudget + durabilityStart}
             step={0.1}
-            onChange={handleDurabilityChange}
+            onChange={(value) => handleDurabilityChange(value - durabilityStart)}
             accentColor="accent-blue-500"
           />
           <StatSlider
             label="Max RPM"
             unit="RPM"
-            value={rpm}
-            min={0}
-            max={totalBudget * rpmDurabilityRatio}
+            value={rpm + rpmStart}
+            min={rpmStart}
+            max={totalBudget * rpmDurabilityRatio + rpmStart}
             step={1}
-            onChange={handleRpmChange}
+            onChange={(value) => handleRpmChange(value - rpmStart)}
             accentColor="accent-red-500"
           />
         </div>
@@ -182,6 +185,26 @@ export default function App() {
                 step={0.1}
                 onChange={handleRatioChange}
                 accentColor="accent-indigo-500"
+              />
+              <StatSlider
+                label="Starting Durability"
+                unit="HP"
+                value={durabilityStart}
+                min={0}
+                max={500}
+                step={1}
+                onChange={setDurabilityStart}
+                accentColor="accent-cyan-500"
+              />
+              <StatSlider
+                label="Starting RPM"
+                unit="RPM"
+                value={rpmStart}
+                min={0}
+                max={2000}
+                step={10}
+                onChange={setRpmStart}
+                accentColor="accent-orange-500"
               />
               <p className="text-xs text-slate-400">
                 This "weight" determines how many RPM points are considered "equal" to 1 Durability point.
