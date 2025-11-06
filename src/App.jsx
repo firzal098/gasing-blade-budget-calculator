@@ -46,7 +46,7 @@ export default function App() {
 
   // --- State ---
   // Default budget of 300 points
-  const [totalBudget, setTotalBudget] = useState(200);
+  const [totalBudget, setTotalBudget] = useState(300);
   
   // Default weight: 1 Durability point is "worth" 10 RPM points.
   const [rpmDurabilityRatio, setRpmDurabilityRatio] = useState(10);
